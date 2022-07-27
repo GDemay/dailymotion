@@ -2,3 +2,4 @@ mysqlclient
 sqlalchemy
 uvicorn
 fastapi
+pydantic[email]
