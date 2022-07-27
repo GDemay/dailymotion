@@ -1,6 +1,6 @@
 CREATE TABLE user (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(30) NOT NULL,
-    age INT,
+    email VARCHAR(255) NOT NULL,
+    hashed_password VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
