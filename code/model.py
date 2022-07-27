@@ -1,11 +1,10 @@
-from sqlalchemy import Column, Integer, String
+from db.session import ENGINE, Base
 from pydantic import BaseModel
-from db import Base
-from db import ENGINE
+from sqlalchemy import Column, Integer, String
 
 
 class UserTable(Base):
-    __tablename__ = 'user'
+    __tablename__ = "user"
     id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
