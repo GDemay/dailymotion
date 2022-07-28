@@ -2,6 +2,7 @@ from typing import Generator
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from importlib_metadata import DeprecatedTuple
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 import crud, models, schemas

@@ -16,11 +16,10 @@ DATABASE = "mysql://%s:%s@%s/%s?charset=utf8" % (
     database_name,
 )
 
-ENGINE = create_engine(DATABASE, encoding="utf-8", echo=True)
+ENGINE = create_engine(DATABASE, pool_pre_ping=True)
+# SessionLocal = Session()
+SessionLocal = sessionmaker(bind=ENGINE)
 
-Session = sessionmaker(bind=ENGINE)
-
-scoped_session = scoped_session(Session)
-SessionLocal = Session()
+# scoped_session = scoped_session(Session)
 
 Base = declarative_base()

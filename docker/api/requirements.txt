@@ -3,3 +3,5 @@ sqlalchemy
 uvicorn
 fastapi
 pydantic[email]
+black
+isort
