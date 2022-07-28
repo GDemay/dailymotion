@@ -47,3 +47,5 @@ def create_user(
         )
     user = crud.user.create(db, obj_in=user_in)
     return user
+
+
