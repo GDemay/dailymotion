@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from model import User, UserTable
 from starlette.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+app = FastAPI(debug=True)
 
 app.include_router(api_router, prefix="/api/v1")
 

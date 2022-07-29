@@ -9,3 +9,4 @@ jwt
 passlib
 python-jose
 python-multipart
+pytest

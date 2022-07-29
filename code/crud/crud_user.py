@@ -44,5 +44,13 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             return None
         return user
 
+    def is_active(self, user: User) -> bool:
+        return user.is_active
+      
+    def set_active(self, db: Session, *, user: User, is_active: bool) -> User:
+        user.is_active = is_active
+        db.commit()
+        return user
+
 
 user = CRUDUser(User)
