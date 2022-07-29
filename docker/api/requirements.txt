@@ -2,3 +2,11 @@ mysqlclient
 sqlalchemy
 uvicorn
 fastapi
+pydantic[email]
+black
+isort
+jwt
+passlib
+python-jose
+python-multipart
+pytest

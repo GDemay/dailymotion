@@ -11,32 +11,34 @@ $ docker-compose up -d --build
 ## Document of API
 http://localhost:8000/docs
 
-You can try GET, POST, PUT
 
-## ex) GET
-```
-$ curl -X GET "http://localhost:8000/users" -H "accept: application/json"
-```
-Result
-```
-[{"id":1,"age":15,"name":"太郎"},{"id":2,"age":18,"name":"次郎"},{"id":3,"age":20,"name":"花子"}]
-```
-## ex) POST
-```
-$ curl -X POST "http://localhost:8000/user?name=士郎&age=10" -H "accept: application/json"
-```
+Hi,
+Congratulations on reaching this stage. We suggest that you take the time to read this technical test and to give us feedback when you are done.
+We will propose you a debriefing with team members afterwards. 
+If you have any questions, don't hesitate to come back to me.
 
-Result
-```
-[{"id":1,"age":15,"name":"太郎"},{"id":2,"age":18,"name":"次郎"},{"id":3,"age":20,"name":"花子"},{"id":4,"age":10,"name":"士郎"}]
-```
+## Context
 
-## ex) PUT
-```
-$ curl -X PUT "http://localhost:8000/users" -H "accept: application/json" -H "Content-Type: application/json" -d "[{\"id\":2,\"name\":\"次郎\",\"age\":13}]"
-```
+Dailymotion handles user registrations. To do so, user creates an account and we send a code by email to verify the account.
+As a core API developer, you are responsible for building this feature and expose it through API.
 
-Result
-```
-[{"id":1,"age":15,"name":"太郎"},{"id":2,"age":13,"name":"次郎"},{"id":3,"age":20,"name":"花子"},{"id":4,"age":10,"name":"士郎"}]
-```
+## Specifications
+
+You have to manage a user registration and his activation.
+The API must support the following use cases:
+* Create a user with an email and a password.
+* Send an email to the user with a 4 digits code.
+* Activate this account with the 4 digits code received. For this step, we consider a `BASIC AUTH` is enough to check if he is the right user.
+* The user has only one minute to use this code. After that, an error should be raised.
+Design and build this API. You are completely free to propose the architecture you want.
+## What do we expect?
+- Your application should be in Python.
+- We expect to have a level of code quality which could go to production.
+- Using frameworks is allowed only for routing, dependency injection, event dispatcher, db connection. Don't use magic (ORM for example)! We want to see **your** implementation.
+- Use the DBMS you want (except SQLite).
+- Consider the SMTP server as a third party service offering an HTTP API. You can mock the call, use a local SMTP server running in a container, or simply print the 4 digits in console. But do not forget in your implementation that **it is a third party service**.
+- Your code should be tested.
+- Your application has to run within a docker containers.
+- You should provide us the source code (or a link to GitHub)
+- You should provide us the instructions to run your code and your tests. We should not install anything except docker/docker-compose to run you project.
+- You should provide us an architecture schema.
