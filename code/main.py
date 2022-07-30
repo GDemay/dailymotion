@@ -5,8 +5,13 @@ from db.session import SessionLocal
 from fastapi import FastAPI
 from model import User, UserTable
 from starlette.middleware.cors import CORSMiddleware
+import logging
 
 app = FastAPI(debug=True)
+
+logger = logging.getLogger("")
+logging.basicConfig(level=logging.DEBUG)
+
 
 app.include_router(api_router, prefix="/api/v1")
 
