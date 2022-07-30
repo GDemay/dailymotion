@@ -15,11 +15,6 @@ from api import deps
 router = APIRouter()
 
 
-@router.post("/login/coucou")
-def coucou(coucou: str):
-    return {"message": coucou}
-
-
 @router.post("/login/access-token", response_model=schemas.Token)
 def login_access_token(
     db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
@@ -44,30 +39,30 @@ def login_access_token(
 @router.post("/login/test-token", response_model=schemas.User)
 def test_token(current_user: models.User = Depends(deps.get_current_user)) -> Any:
     """
-    Test access token
+    Check token access
     """
     return current_user
 
 
 @router.post("/login/email-validator")
-def test_token(
+def email_validator(
     current_user: models.User = Depends(deps.get_current_user),
     db: Session = Depends(deps.get_db),
 ) -> Any:
     """
-    Test access token
+    Create a token to active the user account
     """
 
     # Check if user is active
     if crud.user.is_active(current_user):
-        raise HTTPException(status_code=422, detail="The user is already active.")
+        raise HTTPException(status_code=409, detail="The user is already active.")
 
     # Generate 4 digit random number
     random_digits = random.randint(1000, 9999)
     # This random digits has a time limit of 5 minutes
 
     # Look if a token already exists for this user
-    token = crud.token.get_by_user_id(db, id_user=2)
+    token = crud.token.get_token_by_user_id(db, id_user=current_user.id)
     if token:
         # If a token already exists, check if it is still valid
         if datetime.now() < token.expires_in:
@@ -78,7 +73,7 @@ def test_token(
             # If the token is expired, delete it and create a new one
             print("Token already exists but is expired, delete it")
             logging.debug("Token already exists but is expired")
-            crud.token.delete(db, id=token.id)
+            crud.token.delete(db, id_token=token.id)
 
     # create a new one
     logging.debug("Token does not exist, create a new one")
@@ -100,16 +95,24 @@ def test_token(
 
 
 @router.post("/login/token-validator")
-def test_token(
+def token_validator(
     current_user: models.User = Depends(deps.get_current_user),
     db: Session = Depends(deps.get_db),
     token: str = "",
 ) -> Any:
     """
-    Test access token
+    Validate a token and active the user account
     """
+
+    # Check if the user is active
+    if crud.user.is_active(current_user):
+        raise HTTPException(status_code=422, detail="The user is already active.")
     # Get the token from the database
-    Token = crud.token.get_by_user_id(db, id_user=current_user.id)
+    Token = crud.token.get_token_by_user_id(db, id_user=current_user.id)
+
+    # Check if a token is link to the user
+    if not Token:
+        raise HTTPException(status_code=422, detail="No token found")
     # Check if the token is still valid
     if Token.expires_in < datetime.now():
         raise HTTPException(status_code=400, detail="Token expired")
@@ -122,7 +125,7 @@ def test_token(
     # Check if the user is active
 
     # Delete the token
-    crud.token.delete(db, id=Token.id)
+    crud.token.delete(db, id_token=Token.id)
 
     # Set the user as active
     crud.user.set_active(db, user=current_user, is_active=True)
