@@ -1,4 +1,4 @@
-from api.api_v1.endpoints import login, users
+from app.api.api_v1.endpoints import login, users
 from fastapi import APIRouter
 
 api_router = APIRouter()

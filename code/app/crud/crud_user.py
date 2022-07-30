@@ -1,12 +1,11 @@
+import logging
 from typing import Any, Dict, Optional, Union
 
+from app.core.security import get_password_hash, verify_password
+from app.crud.base import CRUDBase
+from app.models.user import User
+from app.schemas.user import UserCreate, UserUpdate
 from sqlalchemy.orm import Session
-
-from core.security import get_password_hash, verify_password
-from crud.base import CRUDBase
-from models.user import User
-from schemas.user import UserCreate, UserUpdate
-import logging
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
@@ -46,7 +45,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def is_active(self, user: User) -> bool:
         return user.is_active
-      
+
     def set_active(self, db: Session, *, user: User, is_active: bool) -> User:
         user.is_active = is_active
         db.commit()

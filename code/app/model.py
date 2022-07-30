@@ -1,4 +1,4 @@
-from db.session import ENGINE, Base
+from app.db.session import ENGINE, Base
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String
 

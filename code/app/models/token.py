@@ -1,9 +1,9 @@
 from sqlite3 import Date
 from xmlrpc.client import DateTime
-from sqlalchemy import Boolean, Column, Integer, String, DateTime
-from sqlalchemy.orm import relationship
 
-from db.base_class import Base
+from app.db.base_class import Base
+from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy.orm import relationship
 
 
 class Token(Base):

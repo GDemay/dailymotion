@@ -1,14 +1,15 @@
 from typing import Any, List
 
+import app.crud as crud
+import app.model as models
+import app.schemas as schemas
+# import deps
+from app.api import deps
+from app.db.session import SessionLocal
 from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic.networks import EmailStr
 from sqlalchemy.orm import Session
-from db.session import SessionLocal
-import crud, models, schemas
-
-# import deps
-from api import deps
 
 # from core.api import deps
 # from app.core.config import settings
@@ -47,5 +48,3 @@ def create_user(
         )
     user = crud.user.create(db, obj_in=user_in)
     return user
-
-

@@ -1,12 +1,11 @@
+import logging
 from typing import Any, Dict, Optional, Union
 
+from app.core.security import get_password_hash, verify_password
+from app.crud.base import CRUDBase
+from app.models.token import Token
+from app.schemas.token import TokenCreate, TokenUpdate
 from sqlalchemy.orm import Session
-
-from core.security import get_password_hash, verify_password
-from crud.base import CRUDBase
-from models.token import Token
-from schemas.token import TokenCreate, TokenUpdate
-import logging
 
 
 class CRUDToken(CRUDBase[Token, TokenCreate, TokenUpdate]):

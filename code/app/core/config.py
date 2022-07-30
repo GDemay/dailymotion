@@ -1,5 +1,7 @@
 import secrets
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
+
+from pydantic import (AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn,
+                      validator)
 
 
 class Settings(BaseSettings):

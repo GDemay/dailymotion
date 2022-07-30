@@ -1,11 +1,11 @@
+import logging
 from typing import List
 
-from api.api_v1.api import api_router
-from db.session import SessionLocal
+from app.api.api_v1.api import api_router
+from app.db.session import SessionLocal
+from app.model import User, UserTable
 from fastapi import FastAPI
-from model import User, UserTable
 from starlette.middleware.cors import CORSMiddleware
-import logging
 
 app = FastAPI(debug=True)
 
@@ -22,6 +22,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/")
+def hello_world():
+    return {"msg": "Hello World"}
 
 
 @app.get("/users")
