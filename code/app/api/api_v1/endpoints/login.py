@@ -1,16 +1,18 @@
-from datetime import timedelta, datetime
 import logging
-from typing import Any
 import random
+from datetime import datetime, timedelta
+from typing import Any
+
+# import app.crud, app.models, app.schemas
+import app.crud as crud
+import app.model as models
+import app.schemas as schemas
+from app.api import deps
+from app.core.config import settings
+from app.core.security import create_access_token, get_password_hash
 from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from core.config import settings
-from core.security import get_password_hash, create_access_token
-
-import crud, models, schemas
-from api import deps
-
 
 router = APIRouter()
 

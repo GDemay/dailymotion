@@ -3,9 +3,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from jose import jwt
-
 from app.core.config import settings
+from jose import jwt
 
 
 def send_email(
@@ -14,7 +13,7 @@ def send_email(
     html_template: str = "",
     environment: Dict[str, Any] = {},
 ) -> None:
-    
+
     logging.info(f"send email")
 
 
