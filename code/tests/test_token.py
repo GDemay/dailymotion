@@ -36,7 +36,6 @@ def create_user(email: str):
         json={
             "email": email,
             "is_active": False,
-            "full_name": "test",
             "password": "test",
         },
     )

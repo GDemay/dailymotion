@@ -31,7 +31,6 @@ def test_create_user():
         json={
             "email": RANDOM_STRING,
             "is_active": False,
-            "full_name": "test",
             "password": "test",
         },
     )
@@ -52,7 +51,6 @@ def test_create_user_invalid_email():
         json={
             "email": "invalid_email",
             "is_active": False,
-            "full_name": "test",
             "password": "test",
         },
     )
