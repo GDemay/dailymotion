@@ -99,9 +99,9 @@ def test_get_email_validator():
 
     # Validate with token-validator that take as input the email code
     client.headers["Authorization"] = bearer
-    # response = client.post("api/v1/login/token-validator?token=" + email_code)
-    LOGGER.critical(response.content)
-    # assert response.status_code == 200
+    response = client.post("api/v1/login/token-validator?token=" + email_code)
+
+    assert  response.status_code == 409 or response.status_code == 200
 
 
 # Try to get email with a bad token
