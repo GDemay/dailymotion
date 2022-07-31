@@ -9,8 +9,8 @@ import app.models.user as models
 import app.schemas as schemas
 from app.api import deps
 from app.core.config import settings
-from app.core.security import create_access_token, get_password_hash
-from fastapi import APIRouter, Body, Depends, HTTPException
+from app.core.security import create_access_token
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -28,9 +28,12 @@ def auth(
         db, email=form_data.username, password=form_data.password
     )
     if not user:
-        raise HTTPException(status_code=401, detail="Unauthorized. Incorrect email or password")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized. Incorrect email or password",
+        )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    #TODO Create a schema
+    # TODO Create a schema
     return {
         "access_token": create_access_token(
             user.id, expires_delta=access_token_expires
@@ -58,7 +61,9 @@ def email_validator(
 
     # Check if user is active
     if crud.user.is_active(current_user):
-        raise HTTPException(status_code=409, detail="The user is already active.")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail="The user is already active."
+        )
 
     # Generate 4 digit random number
     random_digits = random.randint(1000, 9999)
@@ -81,7 +86,8 @@ def email_validator(
     # create a new one
     logging.debug("Token does not exist, create a new one")
 
-    Token = crud.token.create(
+    # Send the token to the user
+    return crud.token.create(
         db=db,
         obj_in=schemas.TokenCreate(
             id_user=current_user.id,
@@ -90,8 +96,6 @@ def email_validator(
             email_code=random_digits,
         ),
     )
-    # Send the token to the user
-    return Token
 
 
 @router.post("/activate-user")
@@ -106,30 +110,35 @@ def token_validator(
 
     # Check if the user is active
     if crud.user.is_active(current_user):
-        raise HTTPException(status_code=422, detail="The user is already active.")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail="The user is already active."
+        )
     # Get the token from the database
     Token = crud.token.get_token_by_user_id(db, id_user=current_user.id)
 
     # Check if a token is link to the user
     if not Token:
         raise HTTPException(
-            status_code=422, detail="This token does not existsfor to this user."
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="This token does not exists for to this user.",
         )
     # Check if the token is correct
     if Token.email_code != token:
         raise HTTPException(
-            status_code=400,
-            detail="Invalid token. Token:"
-            + str(token)
-            + "Token DB:"
-            + str(Token.email_code),
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid token. Please check the token and try again.",
         )
+
     # Check if the user is the same as the one who created the token
     if Token.id_user != current_user.id:
-        raise HTTPException(status_code=498, detail="Invalid token")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token"
+        )
     # Check if the token is still valid
     if Token.expires_in < datetime.now():
-        raise HTTPException(status_code=498, detail="Token expired")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired"
+        )
     # Check if the user is active
 
     # Delete the token

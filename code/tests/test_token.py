@@ -1,13 +1,10 @@
 import logging
 import random
-from urllib import response
 
-import app.core.config as config
 import app.main as main
 import pytest
-from fastapi import FastAPI
-from starlette.testclient import TestClient
 from app.core.config import settings
+from starlette.testclient import TestClient
 
 LOGGER = logging.getLogger(__name__)
 

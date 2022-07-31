@@ -1,19 +1,21 @@
 import random
 
-from app.core.config import settings
 import app.main as main
 import pytest
+from app.core.config import settings
 from starlette.testclient import TestClient
 
 client = TestClient(main.app)
 
 RANDOM_STRING = (
-    "".join([random.choice("abcdefghijklmnopqrstuvwxyz") for i in range(10)])
+    "".join([random.choice("abcdefghijklmnopqrstuvwxyz") for _ in range(10)])
     + "@example.com"
 )
+
 USER_ID = 1
 
 API_VERSION = settings.API_VERSION
+
 
 def test_get_all_users():
     response = client.get(f"{API_VERSION}/user")
