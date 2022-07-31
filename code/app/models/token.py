@@ -10,4 +10,4 @@ class Token(Base):
     id = Column(Integer, primary_key=True, index=True)
     id_user = Column(Integer, nullable=True)
     expires_in = Column(DateTime, nullable=True)
-    token_code = Column(String, nullable=True)
+    email_code = Column(String, nullable=True)

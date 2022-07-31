@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 
-@router.post("/login/access-token", response_model=schemas.Token)
+@router.post("/access-token", response_model=schemas.Token)
 def login_access_token(
     db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
 ) -> Any:
@@ -38,7 +38,7 @@ def login_access_token(
     }
 
 
-@router.post("/login/test-token", response_model=schemas.User)
+@router.post("/test-token", response_model=schemas.User)
 def test_token(current_user: models.User = Depends(deps.get_current_user)) -> Any:
     """
     Check token access
@@ -46,7 +46,7 @@ def test_token(current_user: models.User = Depends(deps.get_current_user)) -> An
     return current_user
 
 
-@router.post("/login/email-validator")
+@router.post("/email-validator")
 def email_validator(
     current_user: models.User = Depends(deps.get_current_user),
     db: Session = Depends(deps.get_db),
@@ -86,17 +86,14 @@ def email_validator(
             id_user=current_user.id,
             expires_in=datetime.now()
             + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTE_CODE_VALIDATION),
-            token_code=random_digits,
+            email_code=random_digits,
         ),
     )
     # Send the token to the user
-    return {
-        "message": "Your token is {}".format(Token.token_code),
-        "token": Token.token_code,
-    }
+    return Token
 
 
-@router.post("/login/token-validator")
+@router.post("/token-validator")
 def token_validator(
     current_user: models.User = Depends(deps.get_current_user),
     db: Session = Depends(deps.get_db),
@@ -114,16 +111,24 @@ def token_validator(
 
     # Check if a token is link to the user
     if not Token:
-        raise HTTPException(status_code=422, detail="No token found")
-    # Check if the token is still valid
-    if Token.expires_in < datetime.now():
-        raise HTTPException(status_code=400, detail="Token expired")
+        raise HTTPException(
+            status_code=422, detail="This token does not existsfor to this user."
+        )
     # Check if the token is correct
-    if Token.token_code != token:
-        raise HTTPException(status_code=400, detail="Invalid token")
+    if Token.email_code != token:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid token. Token:"
+            + str(token)
+            + "Token DB:"
+            + str(Token.email_code),
+        )
     # Check if the user is the same as the one who created the token
     if Token.id_user != current_user.id:
-        raise HTTPException(status_code=400, detail="Invalid token")
+        raise HTTPException(status_code=498, detail="Invalid token")
+    # Check if the token is still valid
+    if Token.expires_in < datetime.now():
+        raise HTTPException(status_code=498, detail="Token expired")
     # Check if the user is active
 
     # Delete the token

@@ -20,7 +20,7 @@ class CRUDToken(CRUDBase[Token, TokenCreate, TokenUpdate]):
         db_obj = Token(
             id_user=obj_in.id_user,
             expires_in=obj_in.expires_in,
-            token_code=obj_in.token_code,
+            email_code=obj_in.email_code,
         )
         db.add(db_obj)
         db.commit()

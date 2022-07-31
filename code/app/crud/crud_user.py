@@ -9,6 +9,9 @@ from sqlalchemy.orm import Session
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
+    def get(self, db: Session, *, id: int) -> Optional[User]:
+        return db.query(User).filter(User.id == id).first()
+
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
         return db.query(User).filter(User.email == email).first()
 

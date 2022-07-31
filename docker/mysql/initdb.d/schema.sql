@@ -11,6 +11,8 @@ CREATE TABLE token (
     id INT NOT NULL AUTO_INCREMENT,
     id_user INT NOT NULL,
     expires_in DATETIME NOT NULL,
-    token_code VARCHAR(255) NOT NULL,
+    email_code VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
+
+

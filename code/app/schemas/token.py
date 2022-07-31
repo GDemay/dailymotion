@@ -16,18 +16,18 @@ class TokenPayload(BaseModel):
 class TokenBase(BaseModel):
     id_user: int
     expires_in: int
-    token_code: str
+    email_code: str
 
 
 # Properties to receive via API on creation
 class TokenCreate(TokenBase):
     id_user: int
     expires_in: datetime
-    token_code: str
+    email_code: str
 
 
 # Properties to receive via API on update
 class TokenUpdate(TokenBase):
     id_user: int
     expires_in: datetime
-    token_code: str
+    email_code: str
