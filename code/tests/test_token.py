@@ -13,6 +13,8 @@ client = TestClient(main.app)
 EMAIL = "nuomlhhnyg@example.com"
 API_VERSION = settings.API_VERSION
 
+toto = 42
+
 
 def authenticate_user(email: str, password: str) -> str:
     client.headers["content-type"] = "application/x-www-form-urlencoded"
