@@ -1,4 +1,4 @@
-import logging
+""" This is the class for the users endpoint. """
 from typing import Any, List
 
 import app.crud as crud
@@ -16,8 +16,15 @@ def read_users(
     skip: int = 0,
     limit: int = 100,
 ) -> Any:
-    """
-    Retrieve users.
+    """_summary_ line: This is for getting all the users
+
+    Args:
+        db (Session, optional):  Defaults to Depends(deps.get_db).
+        skip (int, optional):  Defaults to 0.
+        limit (int, optional): Defaults to 100.
+
+    Returns:
+      The users.
     """
     return crud.user.get_multi(db, skip=skip, limit=limit)
 
@@ -27,8 +34,17 @@ def read_user(
     user_id: int,
     db: Session = Depends(deps.get_db),
 ) -> Any:
-    """
-    Retrieve a user by id.
+    """_summary_ line: This is for getting a user by id
+
+    Args:
+        user_id (int):  The id of the user.
+        db (Session, optional): Defaults to Depends(deps.get_db).
+
+    Raises:
+        HTTPException:  If the user is not found.
+
+    Returns:
+        Any: The user.
     """
     user = crud.user.get(db, id=user_id)
     if user is None:
@@ -44,10 +60,18 @@ def read_user_by_email(
     email: str,
     db: Session = Depends(deps.get_db),
 ) -> Any:
+    """_summary_ line: This is for getting a user by email
+
+    Args:
+        email (str): The email of the user.
+        db (Session, optional): _description_. Defaults to Depends(deps.get_db).
+
+    Raises:
+        HTTPException:  If the user is not found.
+
+    Returns:
+        Any: The user.
     """
-    Retrieve a user by email.
-    """
-    print("Error: read_user_by_email")
     user = crud.user.get_by_email(db, email=email)
     if user is None:
         raise HTTPException(
@@ -62,8 +86,17 @@ def create_user(
     db: Session = Depends(deps.get_db),
     user_in: schemas.UserCreate,
 ) -> Any:
-    """
-    Create new user.
+    """_summary_ line: This is for creating a user
+
+    Args:
+        user_in (schemas.UserCreate): The user to create.
+        db (Session, optional): The db
+
+    Raises:
+        HTTPException: If the user is not found.
+
+    Returns:
+        Any:  The user.
     """
     user = crud.user.get_by_email(db, email=user_in.email)
     if user:
@@ -82,8 +115,13 @@ def delete_user(
     db: Session = Depends(deps.get_db),
     user_id: int,
 ) -> Any:
-    """
-    Delete user.
+    """_summary_ line: This is for deleting a user
+
+    Args:
+        user_id (int): The id of the user.
+        db (Session, optional): The db
+    Returns:
+        Any: The user.
     """
     user = crud.user.get(db, id=user_id)
     if user is None:
@@ -95,7 +133,6 @@ def delete_user(
     return user
 
 
-# Update user
 @router.put("/{user_id}", response_model=schemas.User)
 def update_user(
     *,
@@ -103,8 +140,18 @@ def update_user(
     user_id: int,
     user_in: schemas.UserUpdate,
 ) -> Any:
-    """
-    Update user.
+    """_summary_ line: This is for updating a user
+
+    Args:
+        user_id (int): The id of the user.
+        user_in (schemas.UserUpdate): The user to update.
+        db (Session, optional): The db
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        Any: _description_
     """
     user = crud.user.get(db, id=user_id)
     if user is None:

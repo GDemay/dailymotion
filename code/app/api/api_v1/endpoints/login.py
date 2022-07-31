@@ -21,8 +21,18 @@ router = APIRouter()
 def auth(
     db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
 ) -> Any:
-    """
-    OAuth2 compatible token login, get an access token for future requests
+    """OAuth2 compatible token login, get an access token for future requests
+
+
+    Args:
+        db (Session, optional): _description_. Defaults to Depends(deps.get_db).
+        form_data (OAuth2PasswordRequestForm, optional): _description_. Defaults to Depends().
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        Any: _description_
     """
     user = crud.user.authenticate(
         db, email=form_data.username, password=form_data.password
@@ -44,8 +54,13 @@ def auth(
 
 @router.post("/me", response_model=schemas.User)
 def test_token(current_user: models.User = Depends(deps.get_current_user)) -> Any:
-    """
-    Check token access
+    """_summary_
+
+    Args:
+        current_user (models.User, optional): _description_. Defaults to Depends(deps.get_current_user).
+
+    Returns:
+        Any: _description_
     """
     return current_user
 
@@ -55,8 +70,17 @@ def email_validator(
     current_user: models.User = Depends(deps.get_current_user),
     db: Session = Depends(deps.get_db),
 ) -> Any:
-    """
-    Create a token to active the user account
+    """This is for checking if an email is valid or not
+
+    Args:
+        current_user (models.User, optional): The user
+        db (Session, optional): _description_. The db
+
+    Raises:
+        HTTPException:  If the user is not found.
+
+    Returns:
+        Any: The user.
     """
 
     # Check if user is active
@@ -104,8 +128,16 @@ def token_validator(
     db: Session = Depends(deps.get_db),
     token: str = "",
 ) -> Any:
-    """
-    Validate a token and active the user account
+    """This is for checking if an email is valid or not
+
+    Args:
+        current_user (models.User, optional): The user
+        db (Session, optional): _description_. The db
+        token (str, optional): _description_.  The token to validate
+
+
+    Returns:
+        Any: The user.
     """
 
     # Check if the user is active

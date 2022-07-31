@@ -1,3 +1,4 @@
+""" This is the main file of the application. """
 import logging
 from typing import List
 
@@ -25,5 +26,10 @@ app.add_middleware(
 
 
 @app.get("/")
-def hello_world():
+def hello_world() -> str:
+    """_summary_: This is the main function of the application.
+
+    Returns:
+        _type_:  str - The string "Hello World"
+    """
     return {"msg": "Hello World"}

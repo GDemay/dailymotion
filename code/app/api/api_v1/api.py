@@ -1,3 +1,4 @@
+""" This is the class use for routing the API. """
 from app.api.api_v1.endpoints import login, users
 from fastapi import APIRouter
 
