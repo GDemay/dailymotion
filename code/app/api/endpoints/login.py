@@ -9,6 +9,7 @@ import app.models.user as models
 import app.schemas as schemas
 from app.api import deps
 from app.core.config import settings
+from app.core.email import Email
 from app.core.security import create_access_token
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -34,7 +35,7 @@ def auth(
     Returns:
         Any: _description_
     """
-    
+
     logging.info("Authenticating user")
 
     user = crud.user.authenticate(
@@ -101,7 +102,6 @@ def email_validator(
     random_digits = random.randint(1000, 9999)
     # This random digits has a time limit of 5 minutes
 
-
     # Look if a token already exists for this user
     token = crud.token.get_token_by_user_id(db, id_user=current_user.id)
     if token:
@@ -130,6 +130,36 @@ def email_validator(
             email_code=random_digits,
         ),
     )
+
+
+# Send an email with the code to the user
+@router.post("/email-validator/send")
+def email_validator_send(
+    current_user: models.User = Depends(deps.get_current_user),
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    """This is for sending an email with the code to the user
+
+    Args:
+        current_user (models.User, optional): The user
+        db (Session, optional): _description_. The db
+
+    Raises:
+        HTTPException:  If the user is not found.
+
+    Returns:
+        Any: The user.
+    """
+
+    # call email_validator to get the token
+    token = email_validator(current_user=current_user, db=db)
+    # send the email with the token
+    email = Email(
+        to=current_user.email,
+        text=f"Your email validation code is {token.email_code}",
+    )
+
+    return email.send()
 
 
 @router.post("/activate-user")

@@ -13,3 +13,5 @@ pytest
 bcrypt
 requests
 httpx
+mailjet_rest
+python-dotenv
