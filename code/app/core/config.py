@@ -1,7 +1,6 @@
 import secrets
 
-from pydantic import (AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn,
-                      validator)
+from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
@@ -9,7 +8,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 1 week
     ACCESS_TOKEN_EXPIRE_MINUTE_CODE_VALIDATION: int = 1  # 1 minute
     ALGORITHM = "HS256"
-    API_V1_STR: str = "/api/v1"
+    API_VERSION: str = "/api/v1"
 
 
 settings = Settings()

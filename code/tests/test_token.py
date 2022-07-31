@@ -7,12 +7,14 @@ import app.main as main
 import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
+from app.core.config import settings
 
 LOGGER = logging.getLogger(__name__)
 
 client = TestClient(main.app)
 
 EMAIL = "nuomlhhnyg@example.com"
+API_VERSION = settings.API_VERSION
 
 
 def authenticate_user(email: str, password: str) -> str:
@@ -21,7 +23,7 @@ def authenticate_user(email: str, password: str) -> str:
         "username": email,
         "password": password,
     }
-    return client.post("/api/v1/login/access-token", data=login_data)
+    return client.post(f"{API_VERSION}/login/access-token", data=login_data)
 
 
 def generate_random_email():
@@ -33,7 +35,7 @@ def generate_random_email():
 
 def create_user(email: str):
     response = client.post(
-        "/api/v1/user",
+        f"{API_VERSION}/user",
         json={
             "email": email,
             "is_active": False,
@@ -55,7 +57,7 @@ def test_user_can_login_successfully_and_receives_valid_token() -> None:
 
     # Use the access token to access the protected endpoint
     client.headers["Authorization"] = f"Bearer {response.json()['access_token']}"
-    response = client.post("/api/v1/login/test-token")
+    response = client.post(f"{API_VERSION}/login/test-token")
     assert response.status_code == 200
 
 
@@ -78,16 +80,16 @@ def test_get_email_validator():
     # Use the access token to access the protected endpoint
     bearer = f"Bearer {response.json()['access_token']}"
     client.headers["Authorization"] = bearer
-    response = client.post("/api/v1/login/test-token")
+    response = client.post(f"{API_VERSION}/login/test-token")
 
     # Try to validate the email with a bad token
     client.headers["Authorization"] = "Bearer bad_token"
-    response = client.post("/api/v1/login/email-validator")
+    response = client.post(f"{API_VERSION}/login/email-validator")
     assert response.status_code == 403
 
     # Get the email validator
     client.headers["Authorization"] = bearer
-    response = client.post("/api/v1/login/email-validator")
+    response = client.post(f"{API_VERSION}/login/email-validator")
     assert response.status_code == 200
 
     # Validate the email
@@ -107,5 +109,5 @@ def test_get_email_validator():
 # Try to get email with a bad token
 def test_get_email_with_bad_token():
     client.headers["Authorization"] = "Bearer bad_token"
-    response = client.post("/api/v1/login/test-token")
+    response = client.post(f"{API_VERSION}/login/test-token")
     assert response.status_code == 403

@@ -1,6 +1,6 @@
 import random
 
-import app.core.config as config
+from app.core.config import settings
 import app.main as main
 import pytest
 from starlette.testclient import TestClient
@@ -13,9 +13,10 @@ RANDOM_STRING = (
 )
 USER_ID = 1
 
+API_VERSION = settings.API_VERSION
 
 def test_get_all_users():
-    response = client.get("/api/v1/user")
+    response = client.get(f"{API_VERSION}/user")
     assert response.status_code == 200
     return response.json()
 
@@ -24,7 +25,7 @@ def test_get_all_users():
 def test_create_user():
     # Create a user
     response = client.post(
-        "/api/v1/user",
+        f"{API_VERSION}/user",
         json={
             "email": RANDOM_STRING,
             "is_active": False,
@@ -37,7 +38,7 @@ def test_create_user():
     # Get the user
     # Get user_id
     USER_ID = response.json()["id"]
-    response = client.get(f"/api/v1/user/{USER_ID}")
+    response = client.get(f"{API_VERSION}/user/{USER_ID}")
     assert response.status_code == 200
 
 
@@ -45,7 +46,7 @@ def test_create_user():
 def test_create_user_invalid_email():
     # Create a user
     response = client.post(
-        "/api/v1/user",
+        f"{API_VERSION}/user",
         json={
             "email": "invalid_email",
             "is_active": False,
@@ -58,26 +59,26 @@ def test_create_user_invalid_email():
 
 # Get a wrong user with an invalid id
 def test_get_user_invalid_id():
-    response = client.get("/api/v1/user/0")
+    response = client.get(f"{API_VERSION}/user/0")
     assert response.status_code == 404
 
 
 # Search the email of the user
 def test_email_in_database():
-    response = client.get(f"/api/v1/user/email/{RANDOM_STRING}")
+    response = client.get(f"{API_VERSION}/user/email/{RANDOM_STRING}")
     assert response.status_code == 200
 
 
 # Search a wrong email
 def test_email_not_in_database():
     fake_email = "this_is_a_bad_email@example.com"
-    response = client.get(f"/api/v1/user/email/{fake_email}")
+    response = client.get(f"{API_VERSION}/user/email/{fake_email}")
     assert response.status_code == 404
 
 
 # Test if the user is active
 def test_get_user_active():
     # Create a user
-    response = client.get(f"/api/v1/user/{USER_ID}")
+    response = client.get(f"{API_VERSION}/user/{USER_ID}")
     assert response.status_code == 200
     assert response.json()["is_active"] == False
