@@ -13,6 +13,7 @@ RANDOM_STRING = (
 USER_ID = 1
 
 
+
 def test_get_all_users():
     response = client.get("/api/v1/user")
     assert response.status_code == 200
