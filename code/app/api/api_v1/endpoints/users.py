@@ -2,20 +2,11 @@ import logging
 from typing import Any, List
 
 import app.crud as crud
-import app.models.user as models
 import app.schemas as schemas
 
-# import deps
 from app.api import deps
-from app.db.session import SessionLocal
-from fastapi import APIRouter, Body, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
-from pydantic.networks import EmailStr
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
-# from core.api import deps
-# from app.core.config import settings
-# from app.utils import send_new_account_email
 
 router = APIRouter()
 
@@ -29,8 +20,7 @@ def read_users(
     """
     Retrieve users.
     """
-    users = crud.user.get_multi(db, skip=skip, limit=limit)
-    return users
+    return crud.user.get_multi(db, skip=skip, limit=limit)
 
 
 @router.get("/{user_id}", response_model=schemas.User)
@@ -75,8 +65,8 @@ def create_user(
     user = crud.user.get_by_email(db, email=user_in.email)
     if user:
         raise HTTPException(
-            status_code=400,
-            detail="The user with this username already exists in the system.",
+            status_code=409,
+            detail="Conflict. The user with this username already exists in the system.",
         )
     user = crud.user.create(db, obj_in=user_in)
     return user
