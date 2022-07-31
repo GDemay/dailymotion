@@ -1,7 +1,8 @@
-import app.main as main
-import app.core.config as config
-import pytest
 import random
+
+import app.core.config as config
+import app.main as main
+import pytest
 from starlette.testclient import TestClient
 
 client = TestClient(main.app)
@@ -11,7 +12,6 @@ RANDOM_STRING = (
     + "@example.com"
 )
 USER_ID = 1
-
 
 
 def test_get_all_users():

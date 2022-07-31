@@ -4,7 +4,6 @@ from typing import Any, List
 import app.crud as crud
 import app.model as models
 import app.schemas as schemas
-
 # import deps
 from app.api import deps
 from app.db.session import SessionLocal
@@ -12,7 +11,6 @@ from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic.networks import EmailStr
 from sqlalchemy.orm import Session
-import logging
 
 # from core.api import deps
 # from app.core.config import settings

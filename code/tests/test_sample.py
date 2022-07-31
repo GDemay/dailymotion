@@ -1,7 +1,7 @@
 import app.main as main
 import pytest
-from starlette.testclient import TestClient
 from app.db.session import ENGINE, Base
+from starlette.testclient import TestClient
 
 client = TestClient(main.app)
 
