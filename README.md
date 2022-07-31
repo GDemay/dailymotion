@@ -1,11 +1,42 @@
 # Overview
-Sample program to build MySQL and Fast API environment with DockerCompose
+This project is a project for Dailymotion. This is the functionnality of the project.
+
+* Create a user with an email and a password.
+* Send an email to the user with a 4 digits code.
+* Activate this account with the 4 digits code received. For this step, we consider a BASIC AUTH is enough to check if he is the right user.
+* The user has only one minute to use this code. After that, an error should be raised. Design and build this API. You are completely free to propose the architecture you want.
+
+BONUS:
+* CRUD system for the users.
+* Hashed passwords.
 
 # Install
 Create and Running
 ```
 $ docker-compose up -d --build
 ```
+
+Testing the API :
+
+In order to test, you must know the name of the container id.
+
+```
+docker ps
+
+
+CONTAINER ID   IMAGE                COMMAND                  CREATED             STATUS         PORTS                               NAMES
+9e92093da3e4   sample_fastapi_api   "uvicorn app.main:ap…"   About an hour ago   Up 8 seconds   0.0.0.0:8000->8000/tcp              api
+7d421f9b1810   sample_fastapi_db    "docker-entrypoint.s…"   About an hour ago   Up 9 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   db
+```	
+
+You want to connect to the API
+```
+$ docker exec -it 9e92093da3e4 bash
+cd /usr/src/server
+pytest
+```	
+
+
 
 # Demo
 ## Document of API
