@@ -7,7 +7,6 @@ from pydantic import BaseModel, EmailStr
 class UserBase(BaseModel):
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = False
-    full_name: Optional[str] = None
 
 
 # Properties to receive via API on creation
