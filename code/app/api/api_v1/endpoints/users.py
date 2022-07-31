@@ -3,9 +3,8 @@ from typing import Any, List
 
 import app.crud as crud
 import app.schemas as schemas
-
 from app.api import deps
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -33,7 +32,9 @@ def read_user(
     """
     user = crud.user.get(db, id=user_id)
     if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     return user
 
 
@@ -49,7 +50,9 @@ def read_user_by_email(
     print("Error: read_user_by_email")
     user = crud.user.get_by_email(db, email=email)
     if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     return user
 
 
@@ -65,7 +68,7 @@ def create_user(
     user = crud.user.get_by_email(db, email=user_in.email)
     if user:
         raise HTTPException(
-            status_code=409,
+            status_code=status.HTTP_409_CONFLICT,
             detail="Conflict. The user with this username already exists in the system.",
         )
     user = crud.user.create(db, obj_in=user_in)
@@ -85,7 +88,7 @@ def delete_user(
     user = crud.user.get(db, id=user_id)
     if user is None:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="The user with this username does not exist in the system.",
         )
     crud.user.remove(db, id=user_id)
@@ -106,7 +109,7 @@ def update_user(
     user = crud.user.get(db, id=user_id)
     if user is None:
         raise HTTPException(
-            status_code=404,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="The user with this username does not exist in the system.",
         )
     user = crud.user.update(db, db_obj=user, obj_in=user_in)
