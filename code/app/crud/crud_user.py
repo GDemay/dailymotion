@@ -1,5 +1,4 @@
 """_This is the base class for all the models."""
-import logging
 from typing import Any, Dict, Optional, Union
 
 from app.core.security import get_password_hash, verify_password

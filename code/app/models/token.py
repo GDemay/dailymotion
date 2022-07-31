@@ -2,8 +2,7 @@ from sqlite3 import Date
 from xmlrpc.client import DateTime
 
 from app.db.base_class import Base
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, DateTime, Integer, String
 
 
 class Token(Base):
