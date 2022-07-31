@@ -1,7 +1,7 @@
 from typing import Generator
 
 import app.crud as crud
-import app.model as models
+import app.models.user as models
 import app.schemas as schemas
 from app.core.config import settings
 from app.db.session import SessionLocal

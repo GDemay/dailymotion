@@ -5,7 +5,7 @@ from typing import Any
 
 # import app.crud, app.models, app.schemas
 import app.crud as crud
-import app.model as models
+import app.models.user as models
 import app.schemas as schemas
 from app.api import deps
 from app.core.config import settings

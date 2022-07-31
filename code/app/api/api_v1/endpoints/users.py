@@ -2,8 +2,9 @@ import logging
 from typing import Any, List
 
 import app.crud as crud
-import app.model as models
+import app.models.user as models
 import app.schemas as schemas
+
 # import deps
 from app.api import deps
 from app.db.session import SessionLocal
