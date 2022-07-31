@@ -34,15 +34,21 @@ def auth(
     Returns:
         Any: _description_
     """
+    
+    logging.info("Authenticating user")
+
     user = crud.user.authenticate(
         db, email=form_data.username, password=form_data.password
     )
     if not user:
+        logging.info("No user found")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized. Incorrect email or password",
         )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    logging.info("Sucessfully authenticated user")
+
     # TODO Create a schema
     return {
         "access_token": create_access_token(
@@ -84,26 +90,30 @@ def email_validator(
     """
 
     # Check if user is active
+    logging.info("Checking if user is active")
     if crud.user.is_active(current_user):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="The user is already active."
         )
 
     # Generate 4 digit random number
+    logging.info("Generating random digits")
     random_digits = random.randint(1000, 9999)
     # This random digits has a time limit of 5 minutes
+
 
     # Look if a token already exists for this user
     token = crud.token.get_token_by_user_id(db, id_user=current_user.id)
     if token:
+        logging.info("A token already exists")
+
         # If a token already exists, check if it is still valid
         if datetime.now() < token.expires_in:
-            logging.debug("Token already exists and is still valid")
+            logging.info("Token already exists and is still valid")
             # If the token is still valid, return the token
             return token
         else:
             # If the token is expired, delete it and create a new one
-            print("Token already exists but is expired, delete it")
             logging.debug("Token already exists but is expired")
             crud.token.delete(db, id_token=token.id)
 
@@ -179,5 +189,5 @@ def token_validator(
     # Set the user as active
     crud.user.set_active(db, user=current_user, is_active=True)
     # Return the user
-    print("Yes!")
+    logging.info("User activated")
     return Token
