@@ -1,7 +1,8 @@
 """ This is the config class for the application. """
 import secrets
-
+import os
 from pydantic import BaseSettings
+from dotenv import load_dotenv, find_dotenv
 
 
 class Settings(BaseSettings):
@@ -21,5 +22,17 @@ class Settings(BaseSettings):
     ALGORITHM = "HS256"  # This is the algorithm for the JWT
     API_VERSION: str = "/api/v1"  # This is the version of the API
 
+    # This is not secure at all but I set it here for the sake of simplicity
+    # In order to avoid you to have to set it in your environment variable
+    # I would normaly recommand to use a more secure method like
+    # like
+
+    load_dotenv(find_dotenv())
+    MAILJET_API_KEY: str = os.environ.get("MAILJET_API_KEY")
+    MAILJET_API_SECRET: str = os.environ.get("MAILJET_API_SECRET")
+    MAILJET_FROM_EMAIL: str = "guillaumedemay@hotmail.fr"
+
+
+# Load the environment variables from the .env file
 
 settings = Settings()

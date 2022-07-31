@@ -12,98 +12,99 @@ UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
-  """ This is the base class for the CRUD operations. 
-  It is a generic class that can be used for any model. """
-  def __init__(self, model: Type[ModelType]):
-    """ CRUD object with default methods to Create, Read, Update, Delete (CRUD).
-    :param model: The model that this CRUD object will handle. """
-    self.model = model
+    """This is the base class for the CRUD operations.
+    It is a generic class that can be used for any model."""
 
-  def get(self, db: Session, id: Any) -> Optional[ModelType]:
-    """Get a single object by ID."
+    def __init__(self, model: Type[ModelType]):
+        """CRUD object with default methods to Create, Read, Update, Delete (CRUD).
+        :param model: The model that this CRUD object will handle."""
+        self.model = model
 
-    Args:
-        db (Session):  The database session.
-        id (Any):  The ID of the object.
+    def get(self, db: Session, id: Any) -> Optional[ModelType]:
+        """Get a single object by ID."
 
-    Returns:
-        Optional[ModelType]: The object.
-    """
-    return db.query(self.model).filter(self.model.id == id).first()
+        Args:
+            db (Session):  The database session.
+            id (Any):  The ID of the object.
 
-  def get_multi(
-      self, db: Session, *, skip: int = 0, limit: int = 100
-  ) -> List[ModelType]:
-    """Get a list of objects."
+        Returns:
+            Optional[ModelType]: The object.
+        """
+        return db.query(self.model).filter(self.model.id == id).first()
 
-    Args:
-        db (Session):  The database session.
-        skip (int, optional):  The number of objects to skip. Defaults to 0.
-        limit (int, optional): The number of objects to limit. Defaults to 100.
+    def get_multi(
+        self, db: Session, *, skip: int = 0, limit: int = 100
+    ) -> List[ModelType]:
+        """Get a list of objects."
 
-    Returns:
-        List[ModelType]:  The list of objects.
-    """
-    return db.query(self.model).offset(skip).limit(limit).all()
+        Args:
+            db (Session):  The database session.
+            skip (int, optional):  The number of objects to skip. Defaults to 0.
+            limit (int, optional): The number of objects to limit. Defaults to 100.
 
-  def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
-    """Create a new object."
+        Returns:
+            List[ModelType]:  The list of objects.
+        """
+        return db.query(self.model).offset(skip).limit(limit).all()
 
-    Args:
-        db (Session): The database session.
-        obj_in (CreateSchemaType): The object to create.
+    def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
+        """Create a new object."
 
-    Returns:
-        ModelType: The created object.
-    """
-    obj_in_data = jsonable_encoder(obj_in)
-    db_obj = self.model(**obj_in_data)  # type: ignore
-    db.add(db_obj)
-    db.commit()
-    db.refresh(db_obj)
-    return db_obj
+        Args:
+            db (Session): The database session.
+            obj_in (CreateSchemaType): The object to create.
 
-  def update(
-      self,
-      db: Session,
-      *,
-      db_obj: ModelType,
-      obj_in: Union[UpdateSchemaType, Dict[str, Any]]
-  ) -> ModelType:
-    """Update an object."
+        Returns:
+            ModelType: The created object.
+        """
+        obj_in_data = jsonable_encoder(obj_in)
+        db_obj = self.model(**obj_in_data)  # type: ignore
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
 
-    Args:
-        db (Session): The database session.
-        db_obj (ModelType): The object to update.
-        obj_in (Union[UpdateSchemaType, Dict[str, Any]]): The object to update.
+    def update(
+        self,
+        db: Session,
+        *,
+        db_obj: ModelType,
+        obj_in: Union[UpdateSchemaType, Dict[str, Any]]
+    ) -> ModelType:
+        """Update an object."
 
-    Returns:
-        ModelType: The updated object.
-    """
-    obj_data = jsonable_encoder(db_obj)
-    if isinstance(obj_in, dict):
-        update_data = obj_in
-    else:
-        update_data = obj_in.dict(exclude_unset=True)
-    for field in obj_data:
-        if field in update_data:
-            setattr(db_obj, field, update_data[field])
-    db.add(db_obj)
-    db.commit()
-    db.refresh(db_obj)
-    return db_obj
+        Args:
+            db (Session): The database session.
+            db_obj (ModelType): The object to update.
+            obj_in (Union[UpdateSchemaType, Dict[str, Any]]): The object to update.
 
-  def remove(self, db: Session, *, id: int) -> ModelType:
-    """Remove an object."
+        Returns:
+            ModelType: The updated object.
+        """
+        obj_data = jsonable_encoder(db_obj)
+        if isinstance(obj_in, dict):
+            update_data = obj_in
+        else:
+            update_data = obj_in.dict(exclude_unset=True)
+        for field in obj_data:
+            if field in update_data:
+                setattr(db_obj, field, update_data[field])
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
 
-    Args:
-        db (Session): The database session.
-        id (int): The ID of the object to remove.
+    def remove(self, db: Session, *, id: int) -> ModelType:
+        """Remove an object."
 
-    Returns:
-        ModelType: The removed object.
-    """
-    obj = db.query(self.model).get(id)
-    db.delete(obj)
-    db.commit()
-    return obj
+        Args:
+            db (Session): The database session.
+            id (int): The ID of the object to remove.
+
+        Returns:
+            ModelType: The removed object.
+        """
+        obj = db.query(self.model).get(id)
+        db.delete(obj)
+        db.commit()
+        return obj
