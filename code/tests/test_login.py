@@ -1,24 +1,16 @@
 import random
 
-import app.main as main
 import pytest
-from app.core.config import settings
 from starlette.testclient import TestClient
 
-client = TestClient(main.app)
-
-RANDOM_STRING = (
-    "".join([random.choice("abcdefghijklmnopqrstuvwxyz") for _ in range(10)])
-    + "@example.com"
-)
-
-USER_ID = 1
-
-API_VERSION = settings.API_VERSION
+import app.main as main
+from app.core.config import settings
+from app.core.email import Email
+from tests.utils import RANDOM_EMAIL, USER_ID, client
 
 
 def test_get_all_users():
-    response = client.get(f"{API_VERSION}/user")
+    response = client.get(f"{settings.API_VERSION}/user")
     assert response.status_code == 200
     return response.json()
 
@@ -27,9 +19,9 @@ def test_get_all_users():
 def test_create_user():
     # Create a user
     response = client.post(
-        f"{API_VERSION}/user",
+        f"{settings.API_VERSION}/user",
         json={
-            "email": RANDOM_STRING,
+            "email": RANDOM_EMAIL,
             "is_active": False,
             "password": "test",
         },
@@ -39,7 +31,7 @@ def test_create_user():
     # Get the user
     # Get user_id
     USER_ID = response.json()["id"]
-    response = client.get(f"{API_VERSION}/user/{USER_ID}")
+    response = client.get(f"{settings.API_VERSION}/user/{USER_ID}")
     assert response.status_code == 200
 
 
@@ -47,7 +39,7 @@ def test_create_user():
 def test_create_user_invalid_email():
     # Create a user
     response = client.post(
-        f"{API_VERSION}/user",
+        f"{settings.API_VERSION}/user",
         json={
             "email": "invalid_email",
             "is_active": False,
@@ -59,26 +51,22 @@ def test_create_user_invalid_email():
 
 # Get a wrong user with an invalid id
 def test_get_user_invalid_id():
-    response = client.get(f"{API_VERSION}/user/0")
+    response = client.get(f"{settings.API_VERSION}/user/0")
     assert response.status_code == 404
 
 
 # Search the email of the user
 def test_email_in_database():
-    response = client.get(f"{API_VERSION}/user/email/{RANDOM_STRING}")
+    response = client.get(f"{settings.API_VERSION}/user/email/{RANDOM_EMAIL}")
     assert response.status_code == 200
 
 
 # Search a wrong email
 def test_email_not_in_database():
     fake_email = "this_is_a_bad_email@example.com"
-    response = client.get(f"{API_VERSION}/user/email/{fake_email}")
+    response = client.get(f"{settings.API_VERSION}/user/email/{fake_email}")
     assert response.status_code == 404
 
 
-# Test if the user is active
-def test_get_user_active():
-    # Create a user
-    response = client.get(f"{API_VERSION}/user/{USER_ID}")
-    assert response.status_code == 200
-    assert response.json()["is_active"] == False
+def test_mailgun_api_key_set():
+    assert settings.MAILJET_API_KEY is not None

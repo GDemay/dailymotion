@@ -4,12 +4,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-user_name = "user"
-password = "password"
-host = "db"
-database_name = "sample_db"
+from app.core.config import settings
 
-DATABASE = f"mysql://{user_name}:{password}@{host}/{database_name}?charset=utf8"
+username = settings.MYSQL_USERNAME
+password = settings.MYSQL_PASSWORD
+mysql_host = settings.MYSQL_HOST
+database = settings.MYSQL_DATABASE
+
+DATABASE = f"mysql://{username}:{password}@{mysql_host}/{database}?charset=utf8"
 
 
 ENGINE = create_engine(DATABASE, pool_pre_ping=True)

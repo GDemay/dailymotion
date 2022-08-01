@@ -1,7 +1,8 @@
-from app.core.config import settings
 import requests
-from app.schemas.token import TokenEmail
 from mailjet_rest import Client
+
+from app.core.config import settings
+from app.schemas.token import TokenEmail
 
 
 class Email:

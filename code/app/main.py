@@ -2,10 +2,11 @@
 import logging
 from typing import List
 
-from app.api.router import api_router
-from app.core.config import settings
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+
+from app.api.router import api_router
+from app.core.config import settings
 
 app = FastAPI(debug=True)
 

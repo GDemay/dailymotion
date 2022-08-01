@@ -1,8 +1,9 @@
 from sqlite3 import Date
 from xmlrpc.client import DateTime
 
-from app.db.base_class import Base
 from sqlalchemy import Column, DateTime, Integer, String
+
+from app.db.base_class import Base
 
 
 class Token(Base):
