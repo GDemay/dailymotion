@@ -6,6 +6,7 @@ from app.crud.base import CRUDBase
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
 from sqlalchemy.orm import Session
+from app.db.database import Database
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
@@ -29,7 +30,21 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         Returns:
             Optional[User]: The user.
         """
-        return db.query(User).filter(User.id == id).first()
+        # Request the user from the database by id. If the user is not found, return None. Take only one
+        query = "SELECT * FROM users WHERE id = %s LIMIT 1"
+        rows = cursor.execute(query, (id,)).fetchall()
+        if len(rows) == 0:
+            return None
+
+        # Create a user object from the database row
+        user = User(
+            id=rows[0][0],
+            email=rows[0][1],
+            hashed_password=rows[0][2],
+            is_active=rows[0][3],
+        )
+        return user
+        # return db.query(User).filter(User.id == id).first()
 
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
         """_summary_ line: This is for getting a user by email

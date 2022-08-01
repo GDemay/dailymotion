@@ -43,6 +43,10 @@ pytest
 ```	
 
 
+sudo apt-get install postgresql-server-dev-all
+sudo apt-get install postgresql-common
+
+
 # Using the API
 
 I noticed that sending an email to a hotmail account is not working. Please use a temp mail like "https://temp-mail.org/"

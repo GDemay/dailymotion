@@ -1,7 +1,9 @@
-FROM python:3.7
+FROM python:3.10
 
 # Working directory is the project root directory
 WORKDIR /usr/src/server
+
+RUN pip install --upgrade pip
 
 # Add requirements.txt file to the image
 ADD requirements.txt .

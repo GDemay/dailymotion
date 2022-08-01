@@ -1,11 +1,11 @@
 """ This is the main file of the application. """
 import logging
-from typing import List
 
 from app.api.router import api_router
 from app.core.config import settings
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from app.db.database import Database
 
 app = FastAPI(debug=True)
 
@@ -22,6 +22,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+db = Database()
 
 
 @app.get("/")

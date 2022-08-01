@@ -15,3 +15,5 @@ requests
 httpx
 mailjet_rest
 python-dotenv
+databases
+psycopg2
