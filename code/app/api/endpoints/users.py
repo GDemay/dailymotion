@@ -1,11 +1,12 @@
 """ This is the class for the users endpoint. """
 from typing import Any, List
 
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+
 import app.crud as crud
 import app.schemas as schemas
 from app.api import deps
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 
 router = APIRouter()
 

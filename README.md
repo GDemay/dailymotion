@@ -14,8 +14,14 @@ BONUS:
 
 You must set in your .env file the following variables:
 
+```
 MAILJET_API_KEY=75444ec4456485fdda8f077ec7e93283
 MAILJET_API_SECRET=dbdba5443ecefab04bfb87139cb2550e
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=password
+MYSQL_HOST=db
+MYSQL_DATABASE=sample_db
+```
 
 Create and Running
 ```

@@ -3,6 +3,10 @@ import random
 from datetime import datetime, timedelta
 from typing import Any
 
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
+
 # import app.crud, app.models, app.schemas
 import app.crud as crud
 import app.models.user as models
@@ -11,9 +15,6 @@ from app.api import deps
 from app.core.config import settings
 from app.core.email import Email
 from app.core.security import create_access_token
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
 
 router = APIRouter()
 

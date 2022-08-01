@@ -1,8 +1,9 @@
 """ This is the config class for the application. """
-import secrets
 import os
+import secrets
+
+from dotenv import find_dotenv, load_dotenv
 from pydantic import BaseSettings
-from dotenv import load_dotenv, find_dotenv
 
 
 class Settings(BaseSettings):
@@ -31,6 +32,12 @@ class Settings(BaseSettings):
     MAILJET_API_KEY: str = os.environ.get("MAILJET_API_KEY")
     MAILJET_API_SECRET: str = os.environ.get("MAILJET_API_SECRET")
     MAILJET_FROM_EMAIL: str = "guillaumedemay@hotmail.fr"
+
+    # MYSQL
+    MYSQL_USERNAME: str = os.environ.get("MYSQL_USERNAME")
+    MYSQL_PASSWORD: str = os.environ.get("MYSQL_PASSWORD")
+    MYSQL_HOST: str = os.environ.get("MYSQL_HOST")
+    MYSQL_DATABASE: str = os.environ.get("MYSQL_DATABASE")
 
 
 # Load the environment variables from the .env file

@@ -2,10 +2,11 @@
 import logging
 from typing import Any, Dict, Optional, Union
 
+from sqlalchemy.orm import Session
+
 from app.crud.base import CRUDBase
 from app.models.token import Token
 from app.schemas.token import TokenCreate, TokenUpdate
-from sqlalchemy.orm import Session
 
 
 class CRUDToken(CRUDBase[Token, TokenCreate, TokenUpdate]):

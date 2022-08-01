@@ -1,15 +1,16 @@
 from typing import Generator
 
-import app.crud as crud
-import app.models.user as models
-import app.schemas as schemas
-from app.core.config import settings
-from app.db.session import SessionLocal
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
+
+import app.crud as crud
+import app.models.user as models
+import app.schemas as schemas
+from app.core.config import settings
+from app.db.session import SessionLocal
 
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f"{settings.API_VERSION}/login/auth")
 
