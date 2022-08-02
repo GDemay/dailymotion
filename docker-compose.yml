@@ -3,6 +3,7 @@ version: "3.3"
 services:
   # MySQL
   db:
+    platform: linux/amd64
     container_name: "db"
     build: ./docker/mysql
     restart: always
