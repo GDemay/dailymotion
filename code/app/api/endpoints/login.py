@@ -73,12 +73,12 @@ def test_token(current_user: models.User = Depends(deps.get_current_user)) -> An
     return current_user
 
 
-@router.post("/email-validator")
-def email_validator(
+@router.post("/verify-email")
+def verify_email(
     current_user: models.User = Depends(deps.get_current_user),
     db: Session = Depends(deps.get_db),
 ) -> Any:
-    """This is for checking if an email is valid or not
+    """This is for sending a token to a user to verify their email address.
 
     Args:
         current_user (models.User, optional): The user
@@ -134,7 +134,7 @@ def email_validator(
 
 
 # Send an email with the code to the user
-@router.post("/email-validator/send")
+@router.post("/verify-email/send")
 def email_validator_send(
     current_user: models.User = Depends(deps.get_current_user),
     db: Session = Depends(deps.get_db),
@@ -153,7 +153,7 @@ def email_validator_send(
     """
 
     # call email_validator to get the token
-    token = email_validator(current_user=current_user, db=db)
+    token = verify_email(current_user=current_user, db=db)
     # send the email with the token
     email = Email(
         to=current_user.email,
