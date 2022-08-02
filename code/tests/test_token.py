@@ -50,12 +50,12 @@ def test_get_email_validator():
 
     # Try to validate the email with a bad token
     client.headers["Authorization"] = "Bearer bad_token"
-    response = client.post(f"{settings.API_VERSION}/login/email-validator")
+    response = client.post(f"{settings.API_VERSION}/login/verify-email")
     assert response.status_code == 403
 
     # Get the email validator
     client.headers["Authorization"] = bearer
-    response = client.post(f"{settings.API_VERSION}/login/email-validator")
+    response = client.post(f"{settings.API_VERSION}/login/verify-email")
     assert response.status_code == 200
 
     # Validate the email
