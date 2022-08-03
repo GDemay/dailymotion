@@ -62,6 +62,9 @@ POST /api/v1/login/activate-user: It allows you to activate your account with a 
 
 I noticed that sending an email to a hotmail account is not working. Please use a temp mail like "https://temp-mail.org/"
 
+## Schema:
+
+https://ibb.co/J56H1LP
 
 ## Improvement of the API
 

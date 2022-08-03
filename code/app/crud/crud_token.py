@@ -29,7 +29,9 @@ class CRUDToken(CRUDBase[Token, TokenCreate, TokenUpdate]):
         Returns:
             Optional[Token]: The token.
         """
-        return db.query(Token).filter(Token.id == id).first()
+        
+        #super() is used to call the parent class's get_by_id method
+        return super().get_by_id(db, id=id)
 
     def get_token_by_user_id(self, db: Session, *, id_user: int) -> Optional[Token]:
         """This is for getting a token by user id."
@@ -104,8 +106,7 @@ class CRUDToken(CRUDBase[Token, TokenCreate, TokenUpdate]):
 
         # Delete all the tokens
         for token in tokens:
-            db.delete(token)
-        db.commit()
+            super().delete(db, db_obj=token)
         return db_obj
 
 

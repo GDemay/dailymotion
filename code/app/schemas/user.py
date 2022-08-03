@@ -32,6 +32,9 @@ class UserInDBBase(UserBase):
 
     id: Optional[int] = None
 
+    # Pydantic's orm_mode will tell the Pydantic model 
+    # to read the data even if it is not a dict, but an ORM model.
+
     class Config:
         orm_mode = True
 

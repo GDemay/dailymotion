@@ -30,7 +30,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         Returns:
             Optional[User]: The user.
         """
-        return db.query(User).filter(User.id == id).first()
+        return super().get(db, id=id)
 
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
         """_summary_ line: This is for getting a user by email
@@ -85,6 +85,18 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             del update_data["password"]
             update_data["hashed_password"] = hashed_password
         return super().update(db, db_obj=db_obj, obj_in=update_data)
+
+    def delete(self, db: Session, *, id: int) -> None:
+        """_summary_ line: This is for deleting a user
+
+        Args:
+            db (Session): The database session.
+            id (int): The id of the user.
+
+        Returns:
+            None: Nothing.
+        """
+        return super().delete(db, id=id)
 
     def authenticate(self, db: Session, *, email: str, password: str) -> Optional[User]:
         """_summary_ line: This is for authenticating a user
